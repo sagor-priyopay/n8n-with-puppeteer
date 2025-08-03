@@ -1,6 +1,9 @@
-FROM n8nio/n8n:latest
+FROM node:20-bullseye-slim
 
-# Install Chromium dependencies
+# Set working directory
+WORKDIR /app
+
+# Install required dependencies for Chromium
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -19,14 +22,14 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
-    --no-install-recommends \
- && rm -rf /var/lib/apt/lists/*
+    --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install Puppeteer and let it download Chromium
-RUN npm install puppeteer
+# Install n8n and Puppeteer
+RUN npm install -g n8n puppeteer
 
-# Expose port
+# Expose n8n default port
 EXPOSE 5678
 
-# Default command
+# Default command to start n8n
 CMD ["n8n"]
